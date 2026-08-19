@@ -1,5 +1,6 @@
 import json
 import qrcode
+import cv2
 
 
 def generate_qr(data, filename="secret_message.png"):
@@ -41,3 +42,22 @@ def read_secure_qr_data(data):
     Convert QR data back into a Python dictionary.
     """
     return json.loads(data)
+
+
+def decode_qr(filename):
+    """
+    Read and decode a QR code from an image file.
+    """
+    detector = cv2.QRCodeDetector()
+
+    image = cv2.imread(filename)
+
+    if image is None:
+        raise FileNotFoundError(f"QR image not found: {filename}")
+
+    data, points, _ = detector.detectAndDecode(image)
+
+    if not data:
+        raise ValueError("Could not decode the QR code.")
+
+    return data
