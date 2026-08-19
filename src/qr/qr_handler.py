@@ -1,3 +1,4 @@
+import json
 import qrcode
 
 
@@ -19,3 +20,24 @@ def generate_qr(data, filename="secret_message.png"):
     image.save(filename)
 
     return filename
+
+
+def create_secure_qr_data(encrypted_message, message_hash):
+    """
+    Create structured data that will be stored inside the QR code.
+    """
+    data = {
+        "algorithm": "Playfair Cipher",
+        "hash_algorithm": "SHA-256",
+        "encrypted_message": encrypted_message,
+        "hash": message_hash
+    }
+
+    return json.dumps(data)
+
+
+def read_secure_qr_data(data):
+    """
+    Convert QR data back into a Python dictionary.
+    """
+    return json.loads(data)
